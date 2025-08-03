@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+  .card {
+    background: #FFFFFF;
+    padding: 25px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    border: 1px solid #53575A;
+  }
+
+  h1, h2 {
+    margin-bottom: 10px;
+    color: #003057;
+    text-align: center;
+  }
+
+  input[type="text"], textarea, input[type="file"] {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 10px;
+    border: 1px solid #53575A;
+    border-radius: 6px;
+    color: #003057;
+    background: #fff;
+  }
+
+  input[type="text"]:focus, textarea:focus, input[type="file"]:focus {
+    border-color: #4A7729;
+    outline: none;
+  }
+
+  button {
+    width: 100%;
+    background-color: #4A7729;
+    color: #FFFFFF;
+    padding: 10px;
+    border: 1px solid #4A7729;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  button:hover {
+    background-color: #003057;
+    border-color: #003057;
+    color: #FFFFFF;
+  }
+
+  .info {
+    font-size: 0.9em;
+    color: #53575A;
+    margin-top: 10px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <h1>Send Fax</h1>
+  <div class="card">
+    <h2>Send Digital Fax</h2>
+    <p>Send documents via Phaxio digital fax service</p>
+    <form action="/send_fax" method="POST" enctype="multipart/form-data">
+      <label>Recipient Fax Number *</label>
+      <input type="text" name="fax_number" placeholder="+1-555-123-4567" required>
+
+      <label>Subject</label>
+      <input type="text" name="subject" placeholder="Prescription Request">
+
+      <label>Cover Message</label>
+      <textarea name="message" rows="3" placeholder="Please find attached prescription request..."></textarea>
+
+      <label>Attach Document *</label>
+      <input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+
+      <button type="submit">Send Fax</button>
+
+      <div class="info">
+        • Supported formats: PDF, JPG, PNG, DOC, DOCX<br>
+        • Max file size: 10MB<br>
+        • Delivery confirmation will be sent via email
+      </div>
+    </form>
+  </div>
+{% endblock %}

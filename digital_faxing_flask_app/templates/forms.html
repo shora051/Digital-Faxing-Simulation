@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+  h1 { color: #003057; margin-bottom: 25px; }
+
+  .fax-card {
+    background: #FFFFFF;
+    border: 1px solid #53575A;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+
+  .fax-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .fax-id {
+    font-size: 1.2em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #003057;
+  }
+
+  .fax-meta {
+    color: #53575A;
+    font-size: 0.95em;
+    margin-bottom: 10px;
+  }
+
+  .badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    background-color: #d6e4ff;
+    color: #003057;
+    border: 1px solid #003057;
+  }
+
+  .badge.verified {
+    background-color: #d3f9d8;
+    color: #4A7729;
+    border: 1px solid #4A7729;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+    font-size: 0.95em;
+  }
+
+  .grid strong {
+    color: #4A7729;
+  }
+
+  .prescription {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: monospace;
+    margin-top: 8px;
+    color: #003057;
+  }
+
+  .btn {
+    margin-top: 15px;
+    padding: 8px 16px;
+    background: #4A7729;
+    border: 1px solid #4A7729;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn:hover {
+    background: #003057;
+    border-color: #003057;
+    color: #FFFFFF;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <h1>Received Faxes</h1>
+
+  {% for form in forms %}
+    <div class="fax-card">
+      <div class="fax-header">
+        <div class="fax-id">
+          Fax #{{ form.id }}
+        </div>
+        <div class="badge {{ 'verified' if form.extracted_fields.get('status') == 'verified' else '' }}">
+          {{ form.extracted_fields.get('status', 'processed') | lower }}
+        </div>
+      </div>
+      <div class="fax-meta">
+        {{ form.created_at }} &nbsp;&nbsp;  {{ form.extracted_fields.get("provider_name") or "N/A" }}
+
+      </div>
+
+      <div class="grid">
+        <div><strong>Form Type</strong><br>{{ form.extracted_fields.get("form_type", "N/A") }}</div>
+        <div><strong>Member ID</strong><br>{{ form.extracted_fields.get("member_id", "N/A") }}</div>
+        <div><strong>Signature</strong><br>{{ form.extracted_fields.get("signature_status", form.extracted_fields.get("signature_present", False) | string | title) }}</div>
+      </div>
+
+      {% if form.extracted_fields.get("prescriptions_or_items") %}
+        <div class="prescription">
+          {% for item in form.extracted_fields.get("prescriptions_or_items", []) %}
+            {{ item }}{% if not loop.last %}<br>{% endif %}
+          {% endfor %}
+        </div>
+      {% elif form.extracted_fields.get("prescription") %}
+        <div class="prescription">{{ form.extracted_fields["prescription"] }}</div>
+      {% endif %}
+
+      <a class="btn" href="/view/{{ form.id }}">View Details</a>
+    </div>
+  {% endfor %}
+{% endblock %}

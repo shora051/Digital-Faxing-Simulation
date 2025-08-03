@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Fax Details{% endblock %}
+
+{% block content %}
+  <h2>Fax ID: {{ form_data.id }}</h2>
+  <p><strong>Filename:</strong> {{ form_data.filename }}</p>
+  <p><strong>Received At:</strong> {{ form_data.created_at }}</p>
+  <p><strong>External Fax ID:</strong> {{ form_data.external_fax_id or 'N/A' }}</p>
+  <p><strong>From Number:</strong> {{ form_data.fax_from_number or 'N/A' }}</p>
+  <p><strong>To Number:</strong> {{ form_data.fax_to_number or 'N/A' }}</p>
+
+  <h2>Parsed Fields</h2>
+  {% if form_data.extracted_fields %}
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for key, value in form_data.extracted_fields.items() %}
+          <tr>
+            <td>{{ key }}</td>
+            <td>
+              {% if value is iterable and not value is string %}
+                {% if value[0] is mapping %}
+                  <!-- Handle list of dictionaries -->
+                    {% for item in value %}
+                   
+                        {% for k, v in item.items() %}
+                          {{ k }}:</strong> {{ v }}{% if not loop.last %} {% endif %}
+                        {% endfor %}
+                  
+                    {% endfor %}
+                {% else %}
+                  <!-- Handle list of strings -->
+                  {{ value | join(', ') }}
+                {% endif %}
+              {% else %}
+                {{ value }}
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No fields extracted.</p>
+  {% endif %}
+{% endblock %}
