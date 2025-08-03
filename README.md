@@ -1,6 +1,6 @@
 # Digital Faxing Simulation
 
-> 🏆 **2nd Place Winner at the Humana Intern Hackathon (out of 30 teams)**
+> 🏆 **2nd Place Winner at the Humana Intern Hackathon**
 
 ---
 
