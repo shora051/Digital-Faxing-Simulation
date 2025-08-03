@@ -6,7 +6,6 @@ from pathlib import Path
 # IMPORTANT: Set environment variables for testing (replace with your actual keys)
 # This MUST be set BEFORE importing modules that depend on it.
 # IMPORTANT: Replace with your actual Gemini/Google API Key for the LLM to work.
-# os.environ["OPENAI_API_KEY"] = "AIzaSyAbJkOcjD6J0h9a3HBPDq2-d7R9jsyW4Q0" # REMOVE THIS LINE
 os.environ["DB_PATH"] = "test_fax_data.db" # Use a separate DB for testing
 
 
